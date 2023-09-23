@@ -23,11 +23,22 @@ make
 If you don't have make, you'll need to run commands manually:
 
 ```
+# set ld path env variable tocurrent dir
+export LD_LIBRARY_PATH=.
+
+# prepare libs
 rustc --crate-type cdylib ./merge_sort.rs
-time gcc -o sort_with_rust sort_with_rust.c -L. -lmerge_sort -Wl,-rpath,.
-time gcc -o sort_with_c sort_with_c.c
-valgrind ./sort_with_rust
-valgrind ./sort_with_c
+gcc -shared -o libmerge_sort_c.so merge_sort.c
+
+# compile
+time gcc -o sort_c_with_rust_import sort_c_with_rust_import.c -L. -lmerge_sort -Wl,-rpath,.
+time gcc -o sort_pure_c sort_pure_c.c
+time rustc -o sort_rust_with_c_import sort_rust_with_c_import.rs -L. -lmerge_sort_c
+
+# run and check runtime and memory usage
+valgrind ./sort_c_with_rust_import
+valgrind ./sort_pure_c
+valgrind ./sort_rust_with_c_import
 ```
 
 # Implementation
