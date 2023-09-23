@@ -43,12 +43,13 @@ valgrind ./sort_rust_with_c_import
 
 # Implementation
 
-Merge sort algorithm is used in both programs. It was chosen because it uses additional space too.
+The merge sort algorithm is used in both programs. It was chosen because it uses additional space too.
 So the programs have O(nlgn) time complexity and O(n) space complexity.
 
 # Results
 
-As we can see, there is no significant difference in compilation time.
-But in runtime performance and memory usage, program written in pure C leads.
-It uses 40 times less memory and runs 5 times faster than the same program using Rust.
+As we can see, there is no significant difference in compilation time between files compiled with the C compiler.
+But the Rust compiler takes almost 7 times more to compile.
+In runtime performance and memory usage, a program written in pure C leads, however, Rust with imported C code runs near it.
+Program in pure C uses 40 times less memory and runs 5 times faster than the same program using Rust.
 ![stats](./docs/images/stats.png)
