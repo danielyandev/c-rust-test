@@ -1,18 +1,32 @@
-all: prepare_rust compile_rust compile_c memory_usage_rust memory_usage_c
+export LD_LIBRARY_PATH=.
 
-prepare_rust:
-	rustc --crate-type cdylib ./merge_sort.rs
+all: prepare_rust_lib prepare_c_lib \
+	compile_c_with_rust_import compile_pure_c compile_rust_with_c_import \
+	memory_usage_c_with_rust_import memory_usage_pure_c memory_usage_rust_with_c_import
 
-compile_rust:
-	time gcc -o sort_with_rust sort_with_rust.c -L. -lmerge_sort -Wl,-rpath,.
+prepare_rust_lib:
+	rustc --crate-type cdylib merge_sort.rs
 
-compile_c:
-	time gcc -o sort_with_c sort_with_c.c
+prepare_c_lib:
+	gcc -shared -o libmerge_sort_c.so merge_sort.c
 
-memory_usage_rust:
-	echo "Memory usage for Rust"
-	valgrind ./sort_with_rust
+compile_c_with_rust_import:
+	time gcc -o sort_c_with_rust_import sort_c_with_rust_import.c -L. -lmerge_sort -Wl,-rpath,.
 
-memory_usage_c:
-	echo "Memory usage for C"
-	valgrind ./sort_with_c
+compile_pure_c:
+	time gcc -o sort_pure_c sort_pure_c.c
+
+compile_rust_with_c_import:
+	time rustc -o sort_rust_with_c_import sort_rust_with_c_import.rs -L. -lmerge_sort_c
+
+memory_usage_c_with_rust_import:
+	@echo "Memory usage for C with Rust import"
+	valgrind ./sort_c_with_rust_import
+
+memory_usage_pure_c:
+	@echo "Memory usage for pure C"
+	valgrind ./sort_pure_c
+
+memory_usage_rust_with_c_import:
+	@echo "Memory usage for Rust with C import"
+	valgrind ./sort_rust_with_c_import

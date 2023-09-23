@@ -1,4 +1,5 @@
 .idea
-sort_with_c
-sort_with_rust
-libmerge_sort.so
+sort_pure_c
+sort_rust_with_c_import
+sort_c_with_rust_import
+*so

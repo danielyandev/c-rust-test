@@ -26,7 +26,7 @@ int main()
 
     clock_t end_time = clock();
     double exec_time = 1000 * (double) (end_time - start_time) / CLOCKS_PER_SEC;
-    printf("Program execution time with Rust %f ms: \n", exec_time);
+    printf("Program execution time C with Rust import %f ms: \n", exec_time);
 
 
     return 0;
